@@ -1,0 +1,42 @@
+.
+├── [    2312026]  binutils_2.26.1-1ubuntu1_16.04.8_amd64.deb
+├── [       4758]  build-essential_12.1ubuntu2_amd64.deb
+├── [      27662]  cpp_5.3.1-1ubuntu1_amd64.deb
+├── [    7783348]  cpp-5_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [      66378]  dkms_2.2.0.3-2ubuntu11.8_all.deb
+├── [     584108]  dpkg-dev_1.18.4ubuntu1.6_all.deb
+├── [       1504]  g++_5.3.1-1ubuntu1_amd64.deb
+├── [    8429590]  g++-5_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [       5244]  gcc_5.3.1-1ubuntu1_amd64.deb
+├── [    8612306]  gcc-5_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [      17386]  gcc-5-base_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [       2048]  kernel
+│   └── [     819098]  linux-headers-4.4.0-142-generic_4.4.0-142.168_amd64.deb
+├── [     264664]  libasan2_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [       8892]  libatomic1_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [    2085806]  libc6-dev_2.23-0ubuntu11_amd64.deb
+├── [      38802]  libcc1-0_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [      68550]  libc-dev-bin_2.23-0ubuntu11_amd64.deb
+├── [      40036]  libcilkrts5_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [     195154]  libdpkg-perl_1.18.4ubuntu1.6_all.deb
+├── [    2238978]  libgcc-5-dev_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [      55194]  libgomp1_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [     524254]  libisl15_0.16.1-1_amd64.deb
+├── [      27430]  libitm1_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [     104884]  liblsan0_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [      39676]  libmpc3_1.0.3-1_amd64.deb
+├── [       9762]  libmpx0_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [     131370]  libquadmath0_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [    1427582]  libstdc++-5-dev_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [     392934]  libstdc++6_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [     243844]  libtsan0_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [      95296]  libubsan0_5.4.0-6ubuntu1_16.04.12_amd64.deb
+├── [     850730]  linux-libc-dev_4.4.0-177.207_amd64.deb
+├── [     150924]  make_4.1-6_amd64.deb
+└── [       2048]  openssh
+    ├── [      46166]  libwrap0_7.6.q-25_amd64.deb
+    ├── [     589888]  openssh-client_7.2p2-4ubuntu2.8_amd64.deb
+    ├── [     335062]  openssh-server_7.2p2-4ubuntu2.8_amd64.deb
+    └── [      38914]  openssh-sftp-server_7.2p2-4ubuntu2.8_amd64.deb
+
+2 directories, 38 files

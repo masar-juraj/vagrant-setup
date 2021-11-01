@@ -1,0 +1,2 @@
+PATH:/etc/netplan/10-__IFNAME__.yaml
+CREATEDIR:yes

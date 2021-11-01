@@ -1,0 +1,60 @@
+.
+├── [      56756]  binutils_2.31.1-16_amd64.deb
+├── [    2073408]  binutils-common_2.31.1-16_amd64.deb
+├── [    1823248]  binutils-x86-64-linux-gnu_2.31.1-16_amd64.deb
+├── [       7576]  build-essential_12.6_amd64.deb
+├── [      19392]  cpp_8.3.0-1_amd64.deb
+├── [    8913868]  cpp-8_8.3.0-6_amd64.deb
+├── [      74448]  dkms_2.6.1-4_all.deb
+├── [    1772844]  dpkg-dev_1.19.7_all.deb
+├── [       1644]  g++_8.3.0-1_amd64.deb
+├── [    9752468]  g++-8_8.3.0-6_amd64.deb
+├── [       5196]  gcc_8.3.0-1_amd64.deb
+├── [    9452500]  gcc-8_8.3.0-6_amd64.deb
+├── [       2048]  kernel
+│   ├── [     396168]  linux-compiler-gcc-8-x86_4.19.98-1_amd64.deb
+│   ├── [     878940]  linux-headers-4.19.0-8-amd64_4.19.98-1_amd64.deb
+│   ├── [    8328876]  linux-headers-4.19.0-8-common_4.19.98-1_all.deb
+│   └── [     628828]  linux-kbuild-4.19_4.19.98-1_amd64.deb
+├── [     362328]  libasan5_8.3.0-6_amd64.deb
+├── [       9032]  libatomic1_8.3.0-6_amd64.deb
+├── [     478412]  libbinutils_2.31.1-16_amd64.deb
+├── [    2691204]  libc6-dev_2.28-10_amd64.deb
+├── [      46636]  libcc1-0_8.3.0-6_amd64.deb
+├── [     275456]  libc-dev-bin_2.28-10_amd64.deb
+├── [    1414164]  libdpkg-perl_1.19.7_all.deb
+├── [    2298300]  libgcc-8-dev_8.3.0-6_amd64.deb
+├── [      64696]  libgdbm6_1.18.1-4_amd64.deb
+├── [      44128]  libgdbm-compat4_1.18.1-4_amd64.deb
+├── [      75824]  libgomp1_8.3.0-6_amd64.deb
+├── [     586648]  libisl19_0.20-2_amd64.deb
+├── [      27748]  libitm1_8.3.0-6_amd64.deb
+├── [     130704]  liblsan0_8.3.0-6_amd64.deb
+├── [      41312]  libmpc3_1.1.0-1_amd64.deb
+├── [     775120]  libmpfr6_4.0.2-1_amd64.deb
+├── [      11392]  libmpx2_8.3.0-6_amd64.deb
+├── [    3883328]  libperl5.28_5.28.1-6_amd64.deb
+├── [     132912]  libquadmath0_8.3.0-6_amd64.deb
+├── [    1531852]  libstdc++-8-dev_8.3.0-6_amd64.deb
+├── [     283372]  libtsan0_8.3.0-6_amd64.deb
+├── [     119904]  libubsan1_8.3.0-6_amd64.deb
+├── [    1314140]  linux-libc-dev_4.19.98-1_amd64.deb
+├── [     340748]  make_4.2.1-1.2_amd64.deb
+├── [       2048]  openssh
+│   ├── [      94024]  libedit2_3.1-20181209-1_amd64.deb
+│   ├── [     158472]  libgssapi-krb5-2_1.17-3_amd64.deb
+│   ├── [     121312]  libk5crypto3_1.17-3_amd64.deb
+│   ├── [      15044]  libkeyutils1_1.6-6_amd64.deb
+│   ├── [     369556]  libkrb5-3_1.17-3_amd64.deb
+│   ├── [      65580]  libkrb5support0_1.17-3_amd64.deb
+│   ├── [      58712]  libwrap0_7.6.q-28_amd64.deb
+│   ├── [     781848]  openssh-client_7.9p1-10+deb10u2_amd64.deb
+│   ├── [     352108]  openssh-server_7.9p1-10+deb10u2_amd64.deb
+│   └── [      44604]  openssh-sftp-server_7.9p1-10+deb10u2_amd64.deb
+├── [     126380]  patch_2.7.6-3+deb10u1_amd64.deb
+├── [     203912]  perl_5.28.1-6_amd64.deb
+├── [    2873240]  perl-modules-5.28_5.28.1-6_all.deb
+└── [       2048]  sudo
+    └── [    1244824]  sudo_1.8.27-1+deb10u2_amd64.deb
+
+3 directories, 54 files

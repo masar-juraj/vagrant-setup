@@ -1,0 +1,2 @@
+PATH:/etc/sysconfig/network-scripts/ifcfg-__IFNAME__
+CREATEDIR:no

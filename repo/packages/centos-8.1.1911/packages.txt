@@ -1,0 +1,42 @@
+.
+├── [    5982552]  binutils-2.30-58.el8.x86_64.rpm
+├── [      61616]  bzip2-1.0.6-26.el8.x86_64.rpm
+├── [   10927364]  cpp-8.3.1-4.5.el8.x86_64.rpm
+├── [       2048]  dkms-epel
+│   └── [      82332]  dkms-2.8.1-4.20200214git5ca628c.el8.noarch.rpm
+├── [      55216]  elfutils-libelf-devel-0.176-5.el8.x86_64.rpm
+├── [   24564532]  gcc-8.3.1-4.5.el8.x86_64.rpm
+├── [    1059028]  glibc-devel-2.28-72.el8.x86_64.rpm
+├── [     479912]  glibc-headers-2.28-72.el8.x86_64.rpm
+├── [     861180]  isl-0.16.1-6.el8.x86_64.rpm
+├── [       2048]  kernel
+│   └── [   14066096]  kernel-devel-4.18.0-147.el8.x86_64.rpm
+├── [    2827732]  kernel-headers-4.18.0-147.el8.x86_64.rpm
+├── [      60132]  libmpc-1.0.2-9.el8.x86_64.rpm
+├── [      35612]  libpkgconf-1.4.2-1.el8.x86_64.rpm
+├── [      25600]  libxcrypt-devel-4.1.1-4.el8.x86_64.rpm
+├── [     509532]  make-4.2.1-9.el8.x86_64.rpm
+├── [      30868]  perl-Carp-1.42-396.el8.noarch.rpm
+├── [      25904]  perl-constant-1.33-396.el8.noarch.rpm
+├── [      77468]  perl-Errno-1.28-416.el8.x86_64.rpm
+├── [      34780]  perl-Exporter-5.72-396.el8.noarch.rpm
+├── [      39048]  perl-File-Path-2.15-2.el8.noarch.rpm
+├── [    6619732]  perl-interpreter-5.26.3-416.el8.x86_64.rpm
+├── [     144772]  perl-IO-1.38-416.el8.x86_64.rpm
+├── [    1631136]  perl-libs-5.26.3-416.el8.x86_64.rpm
+├── [      73388]  perl-macros-5.26.3-416.el8.x86_64.rpm
+├── [      20480]  perl-parent-0.237-1.el8.noarch.rpm
+├── [      92156]  perl-PathTools-3.74-1.el8.x86_64.rpm
+├── [      69416]  perl-Scalar-List-Utils-1.49-2.el8.x86_64.rpm
+├── [      60252]  perl-Socket-2.027-3.el8.x86_64.rpm
+├── [      24692]  perl-Text-Tabs+Wrap-2013.0523-395.el8.noarch.rpm
+├── [      62652]  perl-threads-2.21-2.el8.x86_64.rpm
+├── [      48784]  perl-threads-shared-1.58-2.el8.x86_64.rpm
+├── [      83804]  perl-Unicode-Normalize-1.25-396.el8.x86_64.rpm
+├── [      38948]  pkgconf-1.4.2-1.el8.x86_64.rpm
+├── [      17444]  pkgconf-m4-1.4.2-1.el8.noarch.rpm
+├── [      15588]  pkgconf-pkg-config-1.4.2-1.el8.x86_64.rpm
+├── [     858488]  tar-1.30-4.el8.x86_64.rpm
+└── [      57732]  zlib-devel-1.2.11-10.el8.x86_64.rpm
+
+2 directories, 37 files

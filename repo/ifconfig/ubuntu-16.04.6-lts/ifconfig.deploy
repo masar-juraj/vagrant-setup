@@ -1,0 +1,2 @@
+PATH:/etc/network/interfaces.d/__IFNAME__.conf
+CREATEDIR:yes

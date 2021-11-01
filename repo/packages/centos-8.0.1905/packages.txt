@@ -1,0 +1,38 @@
+.
+├── [    5980548]  binutils-2.30-49.el8.x86_64.rpm
+├── [      61616]  bzip2-1.0.6-26.el8.x86_64.rpm
+├── [   10928160]  cpp-8.2.1-3.5.el8.x86_64.rpm
+├── [       2048]  dkms-epel
+│   └── [      82332]  dkms-2.8.1-4.20200214git5ca628c.el8.noarch.rpm
+├── [      54600]  elfutils-libelf-devel-0.174-6.el8.x86_64.rpm
+├── [   24267660]  gcc-8.2.1-3.5.el8.x86_64.rpm
+├── [    1055628]  glibc-devel-2.28-42.el8.1.x86_64.rpm
+├── [     475688]  glibc-headers-2.28-42.el8.1.x86_64.rpm
+├── [     861180]  isl-0.16.1-6.el8.x86_64.rpm
+├── [       2048]  kernel
+│   └── [   12769684]  kernel-devel-4.18.0-80.el8.x86_64.rpm
+├── [    1626536]  kernel-headers-4.18.0-80.el8.x86_64.rpm
+├── [      60132]  libmpc-1.0.2-9.el8.x86_64.rpm
+├── [      25600]  libxcrypt-devel-4.1.1-4.el8.x86_64.rpm
+├── [     509532]  make-4.2.1-9.el8.x86_64.rpm
+├── [      30868]  perl-Carp-1.42-396.el8.noarch.rpm
+├── [      25904]  perl-constant-1.33-396.el8.noarch.rpm
+├── [      77468]  perl-Errno-1.28-416.el8.x86_64.rpm
+├── [      34780]  perl-Exporter-5.72-396.el8.noarch.rpm
+├── [      39048]  perl-File-Path-2.15-2.el8.noarch.rpm
+├── [    6619732]  perl-interpreter-5.26.3-416.el8.x86_64.rpm
+├── [     144772]  perl-IO-1.38-416.el8.x86_64.rpm
+├── [    1631136]  perl-libs-5.26.3-416.el8.x86_64.rpm
+├── [      73388]  perl-macros-5.26.3-416.el8.x86_64.rpm
+├── [      20480]  perl-parent-0.237-1.el8.noarch.rpm
+├── [      92156]  perl-PathTools-3.74-1.el8.x86_64.rpm
+├── [      69416]  perl-Scalar-List-Utils-1.49-2.el8.x86_64.rpm
+├── [      60096]  perl-Socket-2.027-2.el8.x86_64.rpm
+├── [      24692]  perl-Text-Tabs+Wrap-2013.0523-395.el8.noarch.rpm
+├── [      62652]  perl-threads-2.21-2.el8.x86_64.rpm
+├── [      48784]  perl-threads-shared-1.58-2.el8.x86_64.rpm
+├── [      83804]  perl-Unicode-Normalize-1.25-396.el8.x86_64.rpm
+├── [     858488]  tar-1.30-4.el8.x86_64.rpm
+└── [      57732]  zlib-devel-1.2.11-10.el8.x86_64.rpm
+
+2 directories, 33 files
