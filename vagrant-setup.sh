@@ -2,7 +2,7 @@
 
 declare -A REPO=(
 	# ISO subor s VBoxLinuxAdditions, ktory je urceny pre virtualny system.
-	['VBOX_ISO']='VBoxGuestAdditions_6.1.6.iso'
+	['VBOX_ISO']='VBoxGuestAdditions_6.1.26.iso'
 	# Verejny kluc, ktory vagrant vyzaduje, aby sa mohol autentifikovat bez hesla.
 	['VAGRANT_PUBKEY']='vagrant.pkey'
 )
@@ -43,9 +43,9 @@ declare -A SSHD_CONFIG=(
 )
 declare -A VBOX=(
 	# Priecinok, do ktoreho sa pripoji ISO obraz s VBoxLinuxAdditions.
-	['MOUNT']="/media/cdrom"
+	['MOUNT']="/media/vbox"
 	# Cesta k embedded instalatoru resp. instalovatelnemu archivu VBoxLinuxAdditions.
-	['INSTALLER_BIN']="/media/cdrom/VBoxLinuxAdditions.run"
+	['INSTALLER_BIN']="/media/vbox/VBoxLinuxAdditions.run"
 	# Priecinok, do ktoreho sa extrahuju instalacne subory VBoxLinuxAdditions.
 	['INSTALLER_DIR']="/opt/VBoxGuestAdditions"
 	# Cesta uz k extrahovanemu instalatoru VBoxLinuxAdditions.
@@ -265,37 +265,53 @@ for REPO_ITEM in "IFCONFIG_TPL" "IFCONFIG_DPL"; do
 		exit 1
 	fi
 done
+declare -a CONF_CHECK=(
+	"REPO" "VAGRANT" "SSHD" "SSHD_CONFIG" "VBOX" "SUDO"
+)
+for CONF in "${CONF_CHECK[@]}"; do
+	if [[ "$(declare -p $CONF 2>/dev/null)" != "declare -A $CONF"* ]]; then
+		echo "Skupina s konfiguraciou $CONF neexistuje."
+		exit 1
+	fi
+	for CONF_NAME in $(eval echo \${!${CONF}[@]}); do
+		CONF_VALUE="$(eval echo \${$CONF[$CONF_NAME]})"
+		if [ -z "$CONF_VALUE" ]; then
+			echo "Konfiguracia $CONF[$CONF_NAME] ma prazdnu hodnotu."
+			exit 1
+		fi
+	done
+done
 
 ###############
 
-function root_password()
-{
-	case "${DIST[NAME]}" in
-		"ubuntu") return 3 ;;
-		*) ;;
-	esac
-	getent shadow root 2>/dev/null 1>&2
-	if [ $? -eq 0 ]; then
-		echo root:${VAGRANT[PASSWORD]} |chpasswd 2>/dev/null 1>&2
-		if [ $? -ne 0 ]; then
-			ERRMSG="Nastavenie rootovskeho hesla na ${VAGRANT[PASSWORD]} zlyhalo."
-			return 1
-		fi
-	fi
-	return 0
-}
 function package_install()
 {
-	local PKG_LIST="$(find ${REPO[PACKAGES]} -name *.${DIST[PKG_FORMAT]} -type f 2>/dev/null)"
-	if [ -z "$PKG_LIST" ]; then
+	declare -a PKG_LIST
+	declare -A PKG_ORDER
+	readarray -t PKG_LIST < <(find ${REPO[PACKAGES]} -name *.${DIST[PKG_FORMAT]} -type f 2>/dev/null)
+	if [ ${#PKG_LIST[@]} -eq 0 ]; then
 		ERRMSG="Priecinok ${REPO[PACKAGES]} neobsahuje ziadne baliky."
 		return 1
 	fi
-	${DIST['PKG_MANAGER']} --install $PKG_LIST 2>/dev/null 1>&2
-	if [ $? -ne 0 ]; then
-		ERRMSG="Pri instalacii balikov pomocou ${DIST[PKG_MANAGER]} vznikol problem."
-		return 1
-	fi
+	local PKG_FILE; local PKG_STAGE;
+	for PKG_FILE in "${PKG_LIST[@]}"; do
+		PKG_STAGE="$(echo $PKG_FILE |grep -P -o 'stage[0-9]+' 2>/dev/null)"
+		if [ -z "$PKG_STAGE" ]; then
+			PKG_STAGE="unordered"
+		fi
+		if [ -z "${PKG_ORDER[$PKG_STAGE]}" ]; then
+			PKG_ORDER[$PKG_STAGE]="$PKG_FILE"
+		else
+			PKG_ORDER[$PKG_STAGE]="${PKG_ORDER[$PKG_STAGE]} $PKG_FILE"
+		fi
+	done
+	for PKG_STAGE in `echo ${!PKG_ORDER[@]} |tr ' ' '\n' |sort -n`; do
+		${DIST['PKG_MANAGER']} --install ${PKG_ORDER[$PKG_STAGE]}
+		if [ $? -ne 0 ]; then
+			ERRMSG="Pri instalacii balikov pomocou ${DIST[PKG_MANAGER]} vznikol problem."
+			return 1
+		fi
+	done
 	return 0
 }
 function ifconfig_deploy()
@@ -305,7 +321,7 @@ function ifconfig_deploy()
 		# Cesta k suboru s konfiguraciou sietoveho rozhrania.
 		['PATH']=""
 		# Premenna ci sa ma vytvorit rodicovsky priecinok ak neexistuje.
-		['CREATEDIR']=""
+		['MKDIR']=""
 	)
 	readarray DEPLOY_FILE < <(cat ${REPO[IFCONFIG_DPL]} 2>/dev/null)
 	if [ ${#DEPLOY_FILE[@]} -le 0 ]; then
@@ -333,7 +349,7 @@ function ifconfig_deploy()
 	fi
 	local DIR="$(dirname ${DEPLOY[PATH]})"
 	if [ ! -d "$DIR" ]; then
-		if [ "${DEPLOY[CREATEDIR]}" == "yes" ]; then
+		if [ "${DEPLOY[MKDIR]}" == "yes" ]; then
 			mkdir -p $DIR
 			if [ $? -ne 0 ]; then
 				ERRMSG="Pri vytvarani priecinka $DIR nastala chyba."
@@ -453,7 +469,7 @@ function vbox_extract()
 		ERRMSG="Pripojenie ISO obrazu ${REPO[VBOX_ISO]} do ${VBOX[MOUNT]} zlyhalo."
 		return 1
 	else
-		${VBOX[INSTALLER_BIN]} --noexec --target ${VBOX[INSTALLER_DIR]} 2>/dev/null 1>&2
+		${VBOX[INSTALLER_BIN]} --noexec --target ${VBOX[INSTALLER_DIR]}
 		if [ $? -ne 0 ]; then
 			ERRMSG="Extrakcia VBOX softveru do ${VBOX[INSTALLER_DIR]} zlyhala."
 			return 1
@@ -485,7 +501,7 @@ function vbox_install()
 		ERRMSG="Zmena pracovneho priecinka do ${VBOX[INSTALLER_DIR]} zlyhala."
 		return 1
 	else
-		${VBOX[INSTALLER_EXE]} install --force 2>/dev/null 1>&2
+		${VBOX[INSTALLER_EXE]} install --force
 		local RET=$?
 		if [ $RET -ne 0 ] ; then
 			# Ak pouzivatel vboxadd uz v passwd existuje vracia navratovy kod 2.
@@ -593,27 +609,27 @@ function vagrant_sudo()
 	fi
 	return 0
 }
-declare -a CONF_CHECK=(
-	"REPO" "VAGRANT" "SSHD" "SSHD_CONFIG" "VBOX" "SUDO"
-)
-for CONF in "${CONF_CHECK[@]}"; do
-	if [[ "$(declare -p $CONF 2>/dev/null)" != "declare -A $CONF"* ]]; then
-		echo "Skupina s konfiguraciou $CONF neexistuje."
-		exit 1
-	fi
-	for CONF_NAME in $(eval echo \${!${CONF}[@]}); do
-		CONF_VALUE="$(eval echo \${$CONF[$CONF_NAME]})"
-		if [ -z "$CONF_VALUE" ]; then
-			echo "Konfiguracia $CONF[$CONF_NAME] ma prazdnu hodnotu."
-			exit 1
+function root_password()
+{
+	case "${DIST[NAME]}" in
+		"ubuntu") return 3 ;;
+		*) ;;
+	esac
+	getent shadow root 2>/dev/null 1>&2
+	if [ $? -eq 0 ]; then
+		echo root:${VAGRANT[PASSWORD]} |chpasswd 2>/dev/null 1>&2
+		if [ $? -ne 0 ]; then
+			ERRMSG="Nastavenie rootovskeho hesla na ${VAGRANT[PASSWORD]} zlyhalo."
+			return 1
 		fi
-	done
-done
+	fi
+	return 0
+}
 
 ###############
 
 SETUP_ANSWER=""
-function PRINT_QUESTION()
+function print_question()
 {
 	while : ; do
 		echo -n "   "
@@ -636,90 +652,117 @@ echo "** Distribucia: ${DIST[NAME]}-${DIST[VERSION]}"
 echo "** Vbox: $(basename ${REPO[VBOX_ISO]})"
 echo "** Cas: $(date +'%Y-%m-%d %H:%M:%S')"
 echo "************************************************"
-PRINT_QUESTION "Prajete si spustit tento proces?"
+print_question "Prajete si spustit tento proces?"
 if [ "$SETUP_ANSWER" == "n" ]; then
 	exit 0
 fi
 echo "************************************************"
 
-function PRINT_STEPNAME()
+SETUP_TIME="no"
+function print_header()
 {
-	local STEPNAME=""
+	if [ -n "$1" ]; then
+		echo ""
+		echo "*** ""$1"
+		if [ "$SETUP_TIME" == "yes" ]; then
+			echo "*** ""$(date +"%H:%M:%S.%N")"
+		fi
+	fi
+}
+function print_result()
+{
+	if [ -n "$1" ]; then
+		local STEP_RESULT;
+		case "$1" in
+			0) STEP_RESULT="OK" ;;
+			1) STEP_RESULT="CHYBA" ;;
+			2) STEP_RESULT="EXISTUJE" ;;
+			3) STEP_RESULT="PRESKOCENE" ;;
+			*) STEP_RESULT="???" ;;
+		esac
+		if [ "$SETUP_TIME" == "yes" ]; then
+			echo "*** ""$(date +"%H:%M:%S.%N")"
+		fi
+		echo "*** ""Stav: ""[ $STEP_RESULT ]"
+	fi
+}
+function print_step()
+{
+	local STEP_NAME=""
+	local STEP_TIME="no"; SETUP_TIME="no"
 	case "$1" in
-		'root_password')
-		STEPNAME="Nastavovanie rootovskeho hesla na ${VAGRANT[PASSWORD]}" ;;
 		'package_install')
-		STEPNAME="Instalovanie balikov z ${REPO[PACKAGES]}" ;;
-		'ifconfig_deploy')
-		STEPNAME="Nastavovanie sietoveho rozhrania ${DIST[IFNAME]}" ;;
-		'sshd_config')
-		STEPNAME="Upravovanie konfiguracneho suboru ${SSHD[CONFIG]}" ;;
-		'sudo_requiretty')
-		STEPNAME="Kontrolovanie ${SUDO[CONFIG]} na pritomnost requiretty" ;;
-	##########
+		STEP_NAME="Instalovanie balikov z ${REPO[PACKAGES]}"
+		STEP_TIME="yes"
+		;;
 		'vbox_extract')
-		STEPNAME="Extrahovanie VBOX softveru z $(basename ${REPO[VBOX_ISO]})" ;;
+		STEP_NAME="Extrahovanie VBOX softveru z $(basename ${REPO[VBOX_ISO]})"
+		STEP_TIME="yes"
+		;;
 		'vbox_install')
-		STEPNAME="Instalovanie VBOX softveru z ${VBOX[INSTALLER_DIR]}" ;;
+		STEP_NAME="Instalovanie VBOX softveru z ${VBOX[INSTALLER_DIR]}"
+		STEP_TIME="yes"
+		;;
+	##########
+		'ifconfig_deploy')
+		STEP_NAME="Nastavovanie sietoveho rozhrania ${DIST[IFNAME]}" ;;
+		'sshd_config')
+		STEP_NAME="Upravovanie konfiguracneho suboru ${SSHD[CONFIG]}" ;;
+		'sudo_requiretty')
+		STEP_NAME="Kontrolovanie ${SUDO[CONFIG]} na pritomnost requiretty" ;;
 	##########
 		'vagrant_group')
-		STEPNAME="Vytvaranie pouzivatelskej skupiny ${VAGRANT[GROUP]}" ;;
+		STEP_NAME="Vytvaranie pouzivatelskej skupiny ${VAGRANT[GROUP]}" ;;
 		'vagrant_user')
-		STEPNAME="Vytvaranie pouzivatelskeho uctu ${VAGRANT[USER]}" ;;
+		STEP_NAME="Vytvaranie pouzivatelskeho uctu ${VAGRANT[USER]}" ;;
 		'vagrant_share')
-		STEPNAME="Vytvaranie zdielaneho priecinka ${VAGRANT[SHARE]}" ;;
+		STEP_NAME="Vytvaranie zdielaneho priecinka ${VAGRANT[SHARE]}" ;;
 		'vagrant_pubkey')
-		STEPNAME="Nasadzovanie verejneho kluca $(basename ${REPO[VAGRANT_PUBKEY]})" ;;
+		STEP_NAME="Nasadzovanie verejneho kluca $(basename ${REPO[VAGRANT_PUBKEY]})" ;;
 		'vagrant_sudo')
-		STEPNAME="Povolovanie root prikazov v ${SUDO[DROPIN_FILE]}" ;;
+		STEP_NAME="Povolovanie root prikazov v ${SUDO[DROPIN_FILE]}" ;;
+	##########
+	'root_password')
+		STEP_NAME="Nastavovanie rootovskeho hesla na ${VAGRANT[PASSWORD]}" ;;
 	##########
 		*)
-		STEPNAME="???" ;;
+		STEP_NAME="???" ;;
 	esac
-	echo -n "   "
-	echo -n "$(date +"%H:%M:%S.%N") $STEPNAME"" ... "
-}
-function PRINT_RESULT()
-{
-	local RESULT=""
-	case "$1" in
-		0) RESULT="OK" ;;
-		1) RESULT="CHYBA" ;;
-		2) RESULT="EXISTUJE" ;;
-		3) RESULT="PRESKOCENE" ;;
-		*) RESULT="???" ;;
-	esac
-	echo "[ $RESULT ]"
+	if [ "$STEP_TIME" == "yes" ]; then
+		SETUP_TIME="yes"
+	fi
+	print_header "$STEP_NAME"
 }
 
 declare -a SETUP_ORDER=(
-	'root_password' 'package_install' 'ifconfig_deploy' 'sshd_config' 'sudo_requiretty'
-	'vbox_extract' 'vbox_install'
+	'package_install' 'vbox_extract' 'vbox_install'
+	'ifconfig_deploy' 'sshd_config' 'sudo_requiretty'
 	'vagrant_group' 'vagrant_user' 'vagrant_share' 'vagrant_pubkey' 'vagrant_sudo'
+	'root_password'
 )
 for STEP in "${SETUP_ORDER[@]}"; do
-	PRINT_STEPNAME "$STEP"
+	print_step "$STEP"
 	$STEP
 	RET=$?
-	PRINT_RESULT "$RET"
+	print_result "$RET"
 	if [ $RET -eq 2 ]; then
 		case "$STEP" in
 			'vbox_extract') ;;
 			'vbox_install') ;;
 			*) continue ;;
 		esac
-		PRINT_QUESTION "   ""Prajete si vynutit tento krok?"
+		print_question " ""Prajete si vynutit tento krok?"
 		if [ "$SETUP_ANSWER" == "n" ]; then
 			continue
 		fi
-		PRINT_STEPNAME "$STEP"
+		print_step "$STEP"
 		$STEP "force"
 		RET=$?
-		PRINT_RESULT "$RET"
+		print_result "$RET"
 	fi
 	if [ $RET -eq 1 ]; then
-		echo "    - ""$ERRMSG"
-		PRINT_QUESTION "   ""Prajete si preskocit tento krok?"
+		echo "    ""$ERRMSG"
+		print_question " ""Prajete si preskocit tento krok?"
 		if [ "$SETUP_ANSWER" == "n" ]; then
 			exit 1
 		fi
